@@ -337,7 +337,10 @@ class Nanoleaf:
     async def get_effects(self) -> list[str]:
         try:
             resp = await self._request("get", "effects/effectsList")
-            return await resp.json()
+            data = await resp.json()
+            if isinstance(data, dict):
+                return data.get("effectsList", [])
+            return data
         except Unavailable:
             return []
 
@@ -347,7 +350,10 @@ class Nanoleaf:
     async def get_selected_effect(self) -> str | None:
         try:
             resp = await self._request("get", "effects/select")
-            return await resp.json()
+            data = await resp.json()
+            if isinstance(data, dict):
+                return data.get("select")
+            return data
         except Unavailable:
             return None
 
